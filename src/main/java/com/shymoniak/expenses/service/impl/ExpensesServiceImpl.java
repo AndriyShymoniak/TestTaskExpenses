@@ -1,7 +1,6 @@
 package com.shymoniak.expenses.service.impl;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
-import com.shymoniak.expenses.entity.Expenses;
 import com.shymoniak.expenses.repository.ExpensesRepository;
 import com.shymoniak.expenses.service.ExpensesService;
 import com.shymoniak.expenses.service.utils.ObjectMapperUtils;
@@ -10,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.text.ParseException;
-import java.time.Instant;
-import java.time.ZoneId;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,7 +32,6 @@ public class ExpensesServiceImpl implements ExpensesService {
                 .stream()
                 .map(e -> modelMapper.convertToDto(e))
                 .collect(Collectors.toList());
-        expensesDtoList.forEach(e -> System.out.println(e.getDate()));
         Map<String, List<ExpensesDTO>> result = expensesDtoList.stream()
                 .collect(Collectors.groupingBy(e -> e.getDate()));
         return new TreeMap(result);
@@ -42,12 +39,17 @@ public class ExpensesServiceImpl implements ExpensesService {
 
 
     @Override
-    public void deleteExpensesAtDay(Instant day) {
-////        repository.deleteAllByDateEquals(day);
-////        DateTime dateTimeFrom = new DateTime(day).minusDays(1);
-////        DateTime dateTimeTo = new DateTime(day).plusDays(1);
-//        OffsetDateTime dateTimeFrom = day.minusDays(1);
-//        OffsetDateTime dateTimeTo = day.plusDays(1);
-//        repository.deleteAllByDateBetween(dateTimeFrom,dateTimeTo);
+    public void deleteExpensesAtDay(String day) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(day));
+            Date from = sdf.parse(sdf.format(c.getTime()));
+            c.add(Calendar.DATE, 1);
+            Date to = sdf.parse(sdf.format(c.getTime()));
+            repository.deleteAllByDateBetween(from.toInstant(), to.toInstant());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

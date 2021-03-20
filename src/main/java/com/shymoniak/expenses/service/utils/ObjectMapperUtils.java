@@ -1,6 +1,5 @@
 package com.shymoniak.expenses.service.utils;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
@@ -32,7 +31,7 @@ public class ObjectMapperUtils {
 
     public Expenses convertToEntity(ExpensesDTO expensesDTO) {
         Expenses expenses = modelMapper.map(expensesDTO, Expenses.class);
-        expenses.setDate(expensesDTO.getDateConverted());
+        expenses.setDate(expensesDTO.convertDate());
         return expenses;
     }
 }

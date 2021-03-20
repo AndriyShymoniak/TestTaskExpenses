@@ -27,7 +27,8 @@ public class ExpensesDTO {
     private String currency;
     private String product;
 
-    public Instant getDateConverted(){
+    @Builder()
+    public Instant convertDate(){
         try {
             dateFormat.setTimeZone(USER_TIME_ZONE);
             return dateFormat.parse(this.date).toInstant();
