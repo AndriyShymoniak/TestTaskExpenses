@@ -1,6 +1,7 @@
 package com.shymoniak.expenses.service.impl;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
+import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.repository.ExpensesRepository;
 import com.shymoniak.expenses.service.ExpensesService;
 import com.shymoniak.expenses.service.utils.ObjectMapperUtils;
@@ -33,7 +34,7 @@ public class ExpensesServiceImpl implements ExpensesService {
                 .map(e -> modelMapper.convertToDto(e))
                 .collect(Collectors.toList());
         Map<String, List<ExpensesDTO>> result = expensesDtoList.stream()
-                .collect(Collectors.groupingBy(e -> e.getDate()));
+                .collect(Collectors.groupingBy(ExpensesDTO::getDate));
         return new TreeMap(result);
     }
 
@@ -49,7 +50,7 @@ public class ExpensesServiceImpl implements ExpensesService {
             Date to = sdf.parse(sdf.format(c.getTime()));
             repository.deleteAllByDateBetween(from.toInstant(), to.toInstant());
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new ApiRequestException("Unable to parse date:" + day);
         }
     }
 }

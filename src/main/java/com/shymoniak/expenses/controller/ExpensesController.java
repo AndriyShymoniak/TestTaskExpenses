@@ -1,7 +1,9 @@
 package com.shymoniak.expenses.controller;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
+import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.service.ExpensesService;
+import com.shymoniak.expenses.tools.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,9 @@ public class ExpensesController {
     @Autowired
     private ExpensesService service;
 
+    @Autowired
+    private Validator validator;
+
     @GetMapping({"", "/"})
     ResponseEntity<Map<String, List<ExpensesDTO>>> showAllExpenses() {
         return new ResponseEntity<>(service.getAllExpensesGroupedByDateSorted(),
@@ -25,13 +30,21 @@ public class ExpensesController {
 
     @PostMapping
     ResponseEntity<Void> addExpenses(@RequestBody ExpensesDTO expenses) {
-        service.addExpenses(expenses);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        if(validator.isValidExpensesDto(expenses)){
+            service.addExpenses(expenses);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            throw new ApiRequestException("Invalid expenses data.");
+        }
     }
 
     @DeleteMapping()
     ResponseEntity<Void> deleteExpenses(@RequestParam("date") String sDate) {
-        service.deleteExpensesAtDay(sDate);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (validator.isValidDate(sDate)){
+            service.deleteExpensesAtDay(sDate);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            throw new ApiRequestException("Wrong date.");
+        }
     }
 }

@@ -28,13 +28,9 @@ public class ExpensesDTO {
     private String product;
 
     @Builder()
-    public Instant convertDate(){
-        try {
-            dateFormat.setTimeZone(USER_TIME_ZONE);
-            return dateFormat.parse(this.date).toInstant();
-        } catch (ParseException ex){
-            return null;
-        }
+    public Instant convertDate() throws ParseException {
+        dateFormat.setTimeZone(USER_TIME_ZONE);
+        return dateFormat.parse(this.date).toInstant();
     }
 
     public void setDate(Date date) {
