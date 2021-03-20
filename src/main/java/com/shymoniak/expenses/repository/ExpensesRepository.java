@@ -7,10 +7,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.Instant;
+import java.util.List;
 
 
 @Repository
 public interface ExpensesRepository extends JpaRepository<Expenses, Long> {
     @Transactional
-    void deleteAllByDateBetween(Instant from, Instant to);
+    List<Expenses> deleteAllByDateBetween(Instant from, Instant to);
 }

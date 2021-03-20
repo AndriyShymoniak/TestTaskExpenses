@@ -1,5 +1,7 @@
 package com.shymoniak.expenses.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +29,6 @@ public class ExpensesDTO {
     private String currency;
     private String product;
 
-    @Builder()
     public Instant convertDate() throws ParseException {
         dateFormat.setTimeZone(USER_TIME_ZONE);
         return dateFormat.parse(this.date).toInstant();

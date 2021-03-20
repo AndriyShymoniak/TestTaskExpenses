@@ -29,20 +29,20 @@ public class ExpensesController {
     }
 
     @PostMapping
-    ResponseEntity<Void> addExpenses(@RequestBody ExpensesDTO expenses) {
-        if(validator.isValidExpensesDto(expenses)){
-            service.addExpenses(expenses);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+    ResponseEntity<ExpensesDTO> addExpenses(@RequestBody ExpensesDTO expensesDTO) {
+        if (validator.isValidExpensesDto(expensesDTO)) {
+            service.addExpenses(expensesDTO);
+            return new ResponseEntity<>(expensesDTO, HttpStatus.CREATED);
         } else {
             throw new ApiRequestException("Invalid expenses data.");
         }
     }
 
-    @DeleteMapping()
-    ResponseEntity<Void> deleteExpenses(@RequestParam("date") String sDate) {
-        if (validator.isValidDate(sDate)){
-            service.deleteExpensesAtDay(sDate);
-            return new ResponseEntity<>(HttpStatus.OK);
+    @DeleteMapping
+    ResponseEntity<List<ExpensesDTO>> deleteExpenses(@RequestParam("date") String sDate) {
+        if (validator.isValidDate(sDate)) {
+            return new ResponseEntity<>(service.deleteExpensesAtDay(sDate),
+                    HttpStatus.OK);
         } else {
             throw new ApiRequestException("Wrong date.");
         }

@@ -1,6 +1,7 @@
 package com.shymoniak.expenses.service.impl;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
+import com.shymoniak.expenses.entity.Expenses;
 import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.repository.ExpensesRepository;
 import com.shymoniak.expenses.service.ExpensesService;
@@ -40,15 +41,19 @@ public class ExpensesServiceImpl implements ExpensesService {
 
 
     @Override
-    public void deleteExpensesAtDay(String day) {
+    public List<ExpensesDTO> deleteExpensesAtDay(String day) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
+        List<Expenses> expenses;
         try {
             c.setTime(sdf.parse(day));
             Date from = sdf.parse(sdf.format(c.getTime()));
             c.add(Calendar.DATE, 1);
             Date to = sdf.parse(sdf.format(c.getTime()));
-            repository.deleteAllByDateBetween(from.toInstant(), to.toInstant());
+            expenses = repository.deleteAllByDateBetween(from.toInstant(),
+                    to.toInstant());
+            return expenses.stream().map(e -> modelMapper.convertToDto(e))
+                    .collect(Collectors.toList());
         } catch (ParseException e) {
             throw new ApiRequestException("Unable to parse date:" + day);
         }

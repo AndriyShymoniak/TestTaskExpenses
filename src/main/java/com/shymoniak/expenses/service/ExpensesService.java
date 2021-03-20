@@ -10,5 +10,5 @@ public interface ExpensesService {
 
     Map<String, List<ExpensesDTO>> getAllExpensesGroupedByDateSorted();
 
-    void deleteExpensesAtDay(String day);
+    List<ExpensesDTO> deleteExpensesAtDay(String day);
 }
