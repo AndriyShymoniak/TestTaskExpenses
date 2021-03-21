@@ -31,7 +31,7 @@ public class ExchangeServiceImpl implements ExchangeService {
                 sumInCurrency.put(ex.getCurrency(), ex.getAmount());
             }
         }
-        sumInCurrency.replaceAll((k,v) -> v = exchange(k, base, v));
+        sumInCurrency.replaceAll((k, v) -> v = exchange(k, base, v));
         return sumInCurrency.entrySet()
                 .stream()
                 .map(Map.Entry::getValue)

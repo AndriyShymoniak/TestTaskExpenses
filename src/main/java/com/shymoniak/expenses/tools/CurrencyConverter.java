@@ -14,7 +14,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 @Component
 public class CurrencyConverter {
 
@@ -27,8 +26,8 @@ public class CurrencyConverter {
                         .collect(Collectors.toList());
         Map<String, Double> exchangeRate = new TreeMap<>(String::compareTo);
         String[] splitted;
-        for (int i = 0; i < list.size(); i++) {
-            splitted = list.get(i).split("=");
+        for (String str : list) {
+            splitted = str.split("=");
             exchangeRate.put(splitted[0], Double.valueOf(splitted[1]));
         }
         return exchangeRate;

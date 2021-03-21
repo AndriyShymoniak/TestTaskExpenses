@@ -36,7 +36,7 @@ public class ExchangeController {
                     exchangeService.getTotalExpensesInBase(expenses, base),
                     HttpStatus.OK);
         } else {
-         throw new ApiRequestException("Invalid base format");
+         throw new ApiRequestException("Invalid base format.");
         }
     }
 }

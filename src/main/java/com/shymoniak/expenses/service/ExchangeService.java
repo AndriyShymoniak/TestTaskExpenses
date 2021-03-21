@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface ExchangeService {
     double getTotalExpensesInBase(List<ExpensesDTO> expensesList, String base);
-
 }
