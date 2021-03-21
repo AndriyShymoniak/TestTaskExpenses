@@ -5,7 +5,7 @@ import com.shymoniak.expenses.entity.Expenses;
 import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.repository.ExpensesRepository;
 import com.shymoniak.expenses.service.ExpensesService;
-import com.shymoniak.expenses.service.utils.ObjectMapperUtils;
+import com.shymoniak.expenses.tools.ObjectMapperUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +57,12 @@ public class ExpensesServiceImpl implements ExpensesService {
         } catch (ParseException e) {
             throw new ApiRequestException("Unable to parse date:" + day);
         }
+    }
+
+    @Override
+    public List<ExpensesDTO> getAllExpenses() {
+        return repository.findAll().stream()
+                .map(e -> modelMapper.convertToDto(e))
+                .collect(Collectors.toList());
     }
 }

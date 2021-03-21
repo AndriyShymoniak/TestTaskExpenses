@@ -1,7 +1,10 @@
 package com.shymoniak.expenses.service;
 
-import java.io.IOException;
+import com.shymoniak.expenses.domain.ExpensesDTO;
+
+import java.util.List;
 
 public interface ExchangeService {
-    double exchange(String from, String to, double amount) throws IOException;
+    double getTotalExpensesInBase(List<ExpensesDTO> expensesList, String base);
+
 }

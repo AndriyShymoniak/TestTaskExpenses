@@ -1,4 +1,4 @@
-package com.shymoniak.expenses.service.utils;
+package com.shymoniak.expenses.tools;
 
 import java.text.ParseException;
 import java.util.Date;

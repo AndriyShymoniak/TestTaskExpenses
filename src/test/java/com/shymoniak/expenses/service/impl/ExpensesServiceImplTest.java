@@ -4,7 +4,7 @@ import com.shymoniak.expenses.constant.ApiConstants;
 import com.shymoniak.expenses.domain.ExpensesDTO;
 import com.shymoniak.expenses.entity.Expenses;
 import com.shymoniak.expenses.repository.ExpensesRepository;
-import com.shymoniak.expenses.service.utils.ObjectMapperUtils;
+import com.shymoniak.expenses.tools.ObjectMapperUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

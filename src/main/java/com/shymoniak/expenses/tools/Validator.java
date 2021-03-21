@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Validator {
     /**
-     * @param date
+     * @param date date in String
      * @return true if date consists of numbers in YYYY-MM-DD format, has
      * limited years in a range of [1900 – 2999], months in [01-12] and days
      * in [01-31].
@@ -16,11 +16,15 @@ public class Validator {
                 "(0[1-9]|[12][0-9]|3[01])$");
     }
 
+    public boolean isValidBase(String base){
+        return base.matches("[A-Z]{3}");
+    }
+
     public boolean isValidExpensesDto(ExpensesDTO dto){
         return isValidDate(dto.getDate())
                 && dto.getAmount() > 0
                 && dto.getCurrency() != null
-                && dto.getCurrency().matches("[A-Z]{3}")
+                && isValidBase(dto.getCurrency())
                 && dto.getProduct() != null
                 && dto.getProduct().length() != 0;
     }
