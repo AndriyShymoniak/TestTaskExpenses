@@ -1,13 +1,11 @@
 package com.shymoniak.expenses.service.impl;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
-import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.service.ExchangeService;
 import com.shymoniak.expenses.tools.CurrencyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,11 +37,7 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     public double exchange(String from, String to, double amount) {
-        try {
-            Map<String, Double> currencyValues = converter.getExchangeValues();
-            return amount * currencyValues.get(to) / currencyValues.get(from);
-        } catch (IOException ex) {
-            throw new ApiRequestException("Exchange error.");
-        }
+        Map<String, Double> currencyValues = converter.getExchangeValues();
+        return amount * currencyValues.get(to) / currencyValues.get(from);
     }
 }

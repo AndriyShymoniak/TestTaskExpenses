@@ -1,6 +1,7 @@
 package com.shymoniak.expenses.controller;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
+import com.shymoniak.expenses.entity.Expenses;
 import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.service.ExpensesService;
 import com.shymoniak.expenses.tools.Validator;
@@ -31,8 +32,8 @@ public class ExpensesController {
     @PostMapping
     ResponseEntity<ExpensesDTO> addExpenses(@RequestBody ExpensesDTO expensesDTO) {
         if (validator.isValidExpensesDto(expensesDTO)) {
-            service.addExpenses(expensesDTO);
-            return new ResponseEntity<>(expensesDTO, HttpStatus.CREATED);
+            return new ResponseEntity<>(service.addExpenses(expensesDTO),
+                    HttpStatus.CREATED);
         } else {
             throw new ApiRequestException("Invalid expenses data.");
         }

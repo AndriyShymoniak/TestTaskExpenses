@@ -17,13 +17,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.shymoniak.expenses.constant.ApiConstants.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(SpringRunner.class)
@@ -41,35 +41,58 @@ public class ExpensesServiceImplTest {
 
     @Before
     public void setTestValues() throws ParseException{
-        Mockito.when(repository.findAll()).thenReturn(Stream.of(
-                new Expenses(1L, new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-02-28").toInstant(),2300.0,"UAH","Shoes"),
-                new Expenses(2L, new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-02-28").toInstant(),400.0,"UAH","T-shirt"),
-                new Expenses(3L, new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-02-28").toInstant(),10.0,"USD","Cinema ticket"),
-                new Expenses(4L, new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-03-10").toInstant(),111.0,"USD","Phone repair"),
-                new Expenses(5L, new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-03-11").toInstant(),50.0,"UAH","Jogurt"),
-                new Expenses(6L, new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-03-11").toInstant(),30.0,"UAH","Ice-cream")
+        when(repository.findAll()).thenReturn(Stream.of(
+                new Expenses(1L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-02-28").toInstant(),2300.0,"UAH","Shoes"),
+                new Expenses(2L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-02-28").toInstant(),400.0,"UAH","T-shirt"),
+                new Expenses(3L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-02-28").toInstant(),10.0,"USD","Cinema ticket"),
+                new Expenses(4L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-03-10").toInstant(),111.0,"USD","Phone repair"),
+                new Expenses(5L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-03-11").toInstant(),50.0,"UAH","Jogurt"),
+                new Expenses(6L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-03-11").toInstant(),30.0,"UAH","Ice-cream")
         ).collect(Collectors.toList()));
     }
 
     @Test
-    public void testGetAllExpenses() {
+    public void getAllExpenses() {
         Map<String, List<ExpensesDTO>> listMap = service.getAllExpensesGroupedByDateSorted();
         assertEquals(3, listMap.get("2021-02-28").size());
     }
 
     @Test
-    public void addExpenses() {
+    public void addExpenses() throws ParseException {
+        Expenses expenses = new Expenses(7L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                .parse("2021-03-10").toInstant(),1.5,"USD","Socks");
+        when(repository.save(expenses)).thenReturn(expenses);
+        ExpensesDTO returnedExpenses =
+                service.addExpenses(modelMapper.convertToDto(expenses));
+        verify(repository, times(1)).save(Mockito.any(Expenses.class));
+        assertEquals(returnedExpenses, modelMapper.convertToDto(expenses));
     }
 
     @Test
-    public void testDeleteAtDay() throws ParseException{
-        Date date = new SimpleDateFormat(ApiConstants.DATE_FORMAT).parse("2021-03-11");
-        Instant reqInstant = date.toInstant();
-        Map<String, List<ExpensesDTO>> listMap = service.getAllExpensesGroupedByDateSorted();
-        assertEquals(2, listMap.get("2021-03-11").size());
-//        service.deleteExpensesAtDay(reqInstant);
-        listMap = service.getAllExpensesGroupedByDateSorted();
-        System.out.println(listMap);
-        assertEquals(0, listMap.get("2021-03-11").size());
+    public void deleteAtDay() throws ParseException {
+        String date = "2021-03-11";
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        Calendar c = Calendar.getInstance();
+        c.setTime(sdf.parse(date));
+        Date from = sdf.parse(sdf.format(c.getTime()));
+        c.add(Calendar.DATE, 1);
+        Date to = sdf.parse(sdf.format(c.getTime()));
+        List<Expenses> list = Stream.of(
+                new Expenses(5L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-03-11").toInstant(),50.0,"UAH","Jogurt"),
+                new Expenses(6L, new SimpleDateFormat(ApiConstants.DATE_FORMAT)
+                        .parse("2021-03-11").toInstant(),30.0,"UAH","Ice-cream")
+        ).collect(Collectors.toList());
+        when(repository.deleteAllByDateBetween(from.toInstant(), to.toInstant()))
+                .thenReturn(list);
+        assertEquals(2, service.deleteExpensesAtDay(date).size());
+        verify(repository,times(1))
+                .deleteAllByDateBetween(from.toInstant(), to.toInstant());
     }
 }

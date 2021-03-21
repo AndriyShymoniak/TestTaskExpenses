@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.internal.LinkedTreeMap;
+import com.shymoniak.expenses.exception.ApiRequestException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -16,14 +17,20 @@ import java.util.*;
 
 @Component
 public class CurrencyConverter {
-    public Map<String, Double> getExchangeValues() throws IOException {
-        URL url = new URL("https://api.exchangerate.host/latest");
-        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-        request.connect();
-        JsonParser jp = new JsonParser();
-        JsonElement root =
-                jp.parse(new InputStreamReader((InputStream) request.getContent()));
-        JsonObject jsonObj = root.getAsJsonObject();
-        return new Gson().fromJson(jsonObj.get("rates").toString(), LinkedTreeMap.class);
+    public Map<String, Double> getExchangeValues() {
+        try {
+            URL url = new URL("https://api.exchangerate.host/latest");
+            HttpURLConnection request = (HttpURLConnection) url.openConnection();
+            request.connect();
+            JsonParser jp = new JsonParser();
+            JsonElement root =
+                    jp.parse(new InputStreamReader((InputStream) request.getContent()));
+            JsonObject jsonObj = root.getAsJsonObject();
+            return new Gson().fromJson(jsonObj.get("rates").toString(),
+                    LinkedTreeMap.class);
+        } catch (IOException ex) {
+            throw new ApiRequestException("Couldn't get response from " +
+                    "https://exchangerate.host");
+        }
     }
 }

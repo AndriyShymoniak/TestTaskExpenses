@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.shymoniak.expenses.constant.ApiConstants.*;
+
 @Service
 public class ExpensesServiceImpl implements ExpensesService {
     @Autowired
@@ -23,8 +25,10 @@ public class ExpensesServiceImpl implements ExpensesService {
     private ExpensesRepository repository;
 
     @Override
-    public void addExpenses(ExpensesDTO expenses) {
-        repository.save(modelMapper.convertToEntity(expenses));
+    public ExpensesDTO addExpenses(ExpensesDTO expensesDTO) {
+        Expenses expenses = modelMapper.convertToEntity(expensesDTO);
+        repository.save(expenses);
+        return modelMapper.convertToDto(expenses);
     }
 
     @Override
@@ -41,7 +45,7 @@ public class ExpensesServiceImpl implements ExpensesService {
 
     @Override
     public List<ExpensesDTO> deleteExpensesAtDay(String day) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         Calendar c = Calendar.getInstance();
         List<Expenses> expenses;
         try {
