@@ -1,7 +1,6 @@
 package com.shymoniak.expenses.controller;
 
 import com.shymoniak.expenses.domain.ExpensesDTO;
-import com.shymoniak.expenses.entity.Expenses;
 import com.shymoniak.expenses.exception.ApiRequestException;
 import com.shymoniak.expenses.service.ExpensesService;
 import com.shymoniak.expenses.tools.Validator;
@@ -16,7 +15,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("expenses")
 public class ExpensesController {
-
     @Autowired
     private ExpensesService service;
 

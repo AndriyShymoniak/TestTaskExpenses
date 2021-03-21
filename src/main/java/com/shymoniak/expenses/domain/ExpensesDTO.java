@@ -12,7 +12,6 @@ import java.util.Date;
 
 import static com.shymoniak.expenses.constant.ApiConstants.*;
 
-
 @Data
 @Builder
 @NoArgsConstructor

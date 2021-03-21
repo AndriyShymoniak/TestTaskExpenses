@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ObjectMapperUtils {
-
     @Autowired
     private static ModelMapper modelMapper;
 

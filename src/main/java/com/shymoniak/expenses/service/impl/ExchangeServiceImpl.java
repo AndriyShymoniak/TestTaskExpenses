@@ -12,7 +12,6 @@ import java.util.TreeMap;
 
 @Service
 public class ExchangeServiceImpl implements ExchangeService {
-
     @Autowired
     private CurrencyConverter converter;
 

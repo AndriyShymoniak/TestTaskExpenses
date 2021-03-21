@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("total")
 public class ExchangeController {
-
     @Autowired
     private ExchangeService exchangeService;
 
@@ -30,13 +29,13 @@ public class ExchangeController {
 
     @GetMapping
     ResponseEntity<Double> showAllExpenses(@RequestParam("base") String base) {
-        if (validator.isValidBase(base)){
+        if (validator.isValidBase(base)) {
             List<ExpensesDTO> expenses = expensesService.getAllExpenses();
             return new ResponseEntity<>(
                     exchangeService.getTotalExpensesInBase(expenses, base),
                     HttpStatus.OK);
         } else {
-         throw new ApiRequestException("Invalid base format.");
+            throw new ApiRequestException("Invalid base format.");
         }
     }
 }
