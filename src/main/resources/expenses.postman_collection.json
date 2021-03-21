@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "47d24522-e001-4789-96f9-7f62e286c780",
+		"name": "Test task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Show the list of all expenses grouped and sorted by date",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show total amount of money spent on buying",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/total?base=UAH",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"total"
+					],
+					"query": [
+						{
+							"key": "base",
+							"value": "UAH"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add expense to the list of user expenses",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"date\": \"2021-02-01\",\r\n    \"amount\": 40,\r\n    \"currency\": \"UAH\",\r\n    \"product\": \"Car service\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/expenses",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove all expenses for specified date",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/expenses?date=2021-02-01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"expenses"
+					],
+					"query": [
+						{
+							"key": "date",
+							"value": "2021-02-01"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
