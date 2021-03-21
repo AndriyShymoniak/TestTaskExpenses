@@ -16,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,7 +23,6 @@ import java.util.stream.Stream;
 import static com.shymoniak.expenses.constant.ApiConstants.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -59,7 +57,8 @@ public class ExpensesServiceImplTest {
 
     @Test
     public void getAllExpenses() {
-        Map<String, List<ExpensesDTO>> listMap = service.getAllExpensesGroupedByDateSorted();
+        Map<String, List<ExpensesDTO>> listMap =
+                service.getAllExpensesGroupedByDateSorted();
         assertEquals(3, listMap.get("2021-02-28").size());
     }
 
